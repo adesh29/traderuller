@@ -2,10 +2,28 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField  
 
 SECONDARY_RECIPES = {
-    "Plank": {"Wood": 1, "Iron": 1},
-    "Brick": {"Clay": 1, "Water": 1},
-    "Steel": {"Iron": 1, "Crystal": 1}
+    "Plank": {"Wood": 3, "Iron": 1, "Clay": 1},
+    "Brick": {"Iron": 2, "Water": 2,"Crystal": 1},
+    "Steel": {"Clay": 2, "Water": 1,"Crystal": 2}
 }
+
+FINAL_RECIPES = {
+    "Sword": {
+        "required": {"Plank": 1, "Steel": 1},
+        "points": 5
+    },
+
+    "House": {
+        "required": {"Steel": 1, "Brick": 1, "Crystal": 1, "Clay": 1},
+        "points": 6
+    },
+    "Factory": {
+        "required": {"Brick": 1, "Plank": 1, "Iron": 1,  "Water": 1, "Wood": 1},
+        "points": 7
+    }
+}
+
+
 
 FINAL_RECIPES = {
     "Sword": {
@@ -24,8 +42,8 @@ FINAL_RECIPES = {
 
 
 def default_primary_cards():
-    # Primary resources with initial count 0.
-    return {"Wood": 0, "Iron": 0, "Clay": 0, "Water": 0, "Crystal": 0}
+
+    return {"Wood": 1, "Iron": 1, "Clay": 1, "Water": 1, "Crystal": 1}
 
 def default_secondary_cards():
     return {"Plank": 0, "Brick": 0, "Steel": 0}
@@ -36,13 +54,12 @@ def default_final_products():
 
 class Player(models.Model):
     name = models.CharField(max_length=100)
-    wallet = models.IntegerField(default=1000)
+    wallet = models.IntegerField(default=300)
     points = models.IntegerField(default=0)
-    knights = models.IntegerField(default=0)
-    # Inventories stored as JSON data.
     primary_cards = models.JSONField(default=default_primary_cards)
     secondary_cards = models.JSONField(default=default_secondary_cards)
     final_products = models.JSONField(default=default_final_products)
+    
 
     def __str__(self):
         return self.name
